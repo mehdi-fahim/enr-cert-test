@@ -1,0 +1,30 @@
+version: '3.1'
+services:
+
+  symfony:
+    build: .
+    volumes:
+      - './Lab/:/var/www/symfony/'
+    working_dir: "/var/www/symfony/"
+    ports:
+      - 8000:8000
+
+  database:
+    image: mysql:5.7
+    volumes:
+      - "./Lab/data/:/data/dumps"
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_ROOT_USER=${MYSQL_ROOT_USER}
+  
+  phpmyadmin:
+    depends_on:
+      - database
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - '8080:80'
+    environment:
+      PMA_HOST: database
+      MYSQL_ROOT_USER: ${MYSQL_ROOT_USER} 

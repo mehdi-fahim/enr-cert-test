@@ -1,0 +1,73 @@
+WEB="symfony"
+
+case $1 in
+    
+    # Basic
+    "build")
+        docker-compose build
+    ;;
+    "up")
+        [[ $2 != "" ]] && docker-compose $2 up -d || docker-compose up -d
+    ;;
+    "stop")
+        [[ $2 != "" ]] && docker-compose $2 stop || docker-compose stop
+    ;;
+    "down")
+        [[ $2 != "" ]] && docker-compose $2 down || docker-compose down
+    ;;
+    "restart")
+        [[ $2 != "" ]] && docker-compose $2 restart || docker-compose restart
+    ;;
+    
+    # CUSTOM
+    "bash")
+        [[ $2 != "" ]] && docker-compose exec $2 bash || echo "Give me name service !"
+    ;;
+    
+    "logs")
+        [[ $2 != "" ]] && docker-compose logs $2 || docker-compose logs
+    ;;
+    
+    "tail")
+        [[ $2 != "" ]] && docker-compose logs -f $2 || docker-compose logs -f
+    ;;
+    
+    "install")
+        docker-compose up -d
+        echo "composer install" && docker-compose exec $WEB composer install
+        echo "composer dump-autoload --optimize --classmap-authoritative" && docker-compose exec $WEB composer dump-autoload --optimize --classmap-authoritative --no-interaction
+        echo "php bin/console doctrine:database:create --connection=default" && docker-compose exec $WEB php bin/console doctrine:database:create --connection=default --no-interaction
+        echo "php bin/console cache:clear" && docker-compose exec $WEB php bin/console cache:clear --no-interaction
+        echo "php bin/console doctrine:schema:update --force" && docker-compose exec $WEB php bin/console doctrine:schema:update --force
+        echo "php bin/console doctrine:fixtures:load --no-interaction --append" && docker-compose exec $WEB php bin/console doctrine:fixtures:load --no-interaction --append
+
+
+    ;;
+
+    "reinstall::db")
+        echo "php bin/console doctrine:database:create --connection=default" && docker-compose exec $WEB php bin/console doctrine:database:create --connection=default
+        echo "php bin/console doctrine:schema:update --force" && docker-compose exec $WEB php bin/console doctrine:schema:update --force        
+        echo "php public/sqlTicket.php" && docker-compose exec $WEB php public/sqlTicket.php
+        echo "php bin/console doctrine:fixtures:load --no-interaction --append" && docker-compose exec $WEB php bin/console doctrine:fixtures:load --no-interaction --append
+
+    ;;
+    
+    "reinstall")
+        ./dockerkit down
+        ./dockerkit install
+    ;;
+    
+    "create::db")
+        echo "php bin/console doctrine:schema:create" && docker-compose exec $WEB php bin/console doctrine:database:create
+    ;;
+
+    "update::db")
+        echo "php bin/console doctrine:schema:update --force" && docker-compose exec $WEB php bin/console doctrine:schema:update --force
+    ;;
+    
+    # default
+    *)
+        echo $"Usage: $0"
+        exit 1
+    ;;
+esac

@@ -1,0 +1,7 @@
+1. Créer une API Rest sous Symfony, API qui expose un produit e-commerce simple avec un peu d'informations (ex: un canapé, couleur, poids, prix HT, TTC, stock...etc.). Cette ressource doit disposer d'un CRUD (Create, Read, Update, Detele), manipulable en utilisant les HTTP verbs. L'accès à cette API doit être sécurisée par système de jeton JWT.
+
+2. Publier ce test sur un repo git.
+
+3. Nous fournir une documentation sur l'installation et l'utilisation de cette API.
+
+4. Nous expliquer tes choix.
