@@ -1,4 +1,4 @@
-# ENR'CERT Technique
+# ENR'CERT Test Technique
 
 Ce projet est un tests technique pour l'entreprise ENR'CERT
 
@@ -59,7 +59,7 @@ une fois que c'est fais vous pouvez lancé le projet ```php bin/console server:r
 ```
 $ mkdir -p config/jwt
 $ openssl genrsa -out config/jwt/private.pem -aes256 4096
-$ open
+$ openssl rsa -pubout -in config/jwt/private.pem -out config/jwt/public.pem
 ```
 
 ### Routes
@@ -95,8 +95,8 @@ Body de la requète (pour la création et la mise à jour)
 ## Informations de connexion
 
 Utilisateurs créés via les fixtures :
-- admin@attineos.com / admin
-- user@attineos.com / user
+- admin@gmail.com / admin
+- user@gmail.com / user
 
 ##### Justification techniques
 
